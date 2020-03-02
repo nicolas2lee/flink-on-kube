@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "flink-on-kube.fullname" . }}-test-connection"
+  labels:
+{{ include "flink-on-kube.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args:  ['{{ include "flink-on-kube.fullname" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never
